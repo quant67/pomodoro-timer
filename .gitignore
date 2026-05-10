@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.playwright-cli/
+output/
+.codex/
+
+.DS_Store
+*.log
+*.tsbuildinfo
+
+coverage/
+*.local

@@ -1,0 +1,15 @@
+.tomato-clock-plugin-host {
+	min-height: 100%;
+	background: var(--background-primary);
+	color: var(--text-normal);
+}
+
+.tomato-clock-plugin-host .app-layout {
+	min-height: 100%;
+	max-width: none;
+}
+
+.tomato-clock-plugin-host .sidebar,
+.tomato-clock-plugin-host .right-panel {
+	min-height: 100%;
+}
