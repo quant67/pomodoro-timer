@@ -19,13 +19,13 @@ export default class TomatoClockPlugin extends Plugin {
 
 		this.registerView(VIEW_TYPE_TOMATO_CLOCK, (leaf) => new TomatoClockView(leaf, this));
 
-		this.addRibbonIcon("clock", "Tomato Clock", () => {
+		this.addRibbonIcon("clock", "Pomodoro Timer", () => {
 			this.activateView();
 		});
 
 		this.addCommand({
 			id: "open-tomato-clock",
-			name: "Open Tomato Clock",
+			name: "Open Pomodoro Timer",
 			callback: () => {
 				this.activateView();
 			},

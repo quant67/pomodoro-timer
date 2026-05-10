@@ -40,7 +40,7 @@ export async function hydrateTasksFromDailyNote(plugin: TaskSyncPlugin): Promise
 		);
 		await plugin.savePluginData();
 	} catch (error) {
-		console.error('Failed to hydrate Tomato Clock tasks from Daily Note', error);
+		console.error('Failed to hydrate Pomodoro Timer tasks from Daily Note', error);
 	}
 }
 
@@ -63,7 +63,7 @@ export async function syncFocusTasksToDailyNote(plugin: TaskSyncPlugin): Promise
 			focusTasksToSyncedTasks(prepared.managedTasks, plugin.settings.taskSyncTag),
 		);
 	} catch (error) {
-		console.error('Failed to sync Tomato Clock tasks to Daily Note', error);
+		console.error('Failed to sync Pomodoro Timer tasks to Daily Note', error);
 	}
 }
 

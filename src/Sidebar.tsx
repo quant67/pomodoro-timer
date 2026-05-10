@@ -55,7 +55,7 @@ export function Sidebar({ mode, soundEnabled, onToggleSound, onSetMode }: Props)
     <aside className="sidebar">
       <div className="sidebar-brand">
         <TomatoIcon />
-        <span className="sidebar-title">Tomato Clock</span>
+        <span className="sidebar-title">Pomodoro Timer</span>
       </div>
 
       <nav className="sidebar-nav" aria-label="Timer modes">

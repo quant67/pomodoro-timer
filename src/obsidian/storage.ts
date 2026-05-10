@@ -49,7 +49,7 @@ export function createObsidianStorageAdapter(plugin: TomatoClockDataHost): JsonS
 		save<T>(key: string, value: T): void {
 			plugin.data.appState[key] = value;
 			void plugin.savePluginData().catch((error) => {
-				console.error('Failed to save Tomato Clock plugin data', error);
+				console.error('Failed to save Pomodoro Timer plugin data', error);
 			});
 			plugin.onAppStateSaved?.(key);
 		},

@@ -24935,7 +24935,7 @@ function Sidebar({ mode, soundEnabled, onToggleSound, onSetMode }) {
   return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("aside", { className: "sidebar", children: [
     /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "sidebar-brand", children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TomatoIcon, {}),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "sidebar-title", children: "Tomato Clock" })
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "sidebar-title", children: "Pomodoro Timer" })
     ] }),
     /* @__PURE__ */ (0, import_jsx_runtime.jsx)("nav", { className: "sidebar-nav", "aria-label": "Timer modes", children: Object.keys(MODE_LABELS).map((m) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
       "button",
@@ -25493,7 +25493,7 @@ function renderManagedSection(stats, tasks) {
   lines.push("");
   const totalSessions = stats.totalFocusSessions;
   const totalMin = stats.totalFocusMinutes;
-  lines.push(`## \u{1F345} Tomato Clock`);
+  lines.push(`## \u{1F345} Pomodoro Timer`);
   lines.push("");
   lines.push(`**${totalSessions}** focus sessions \xB7 **${totalMin}** minutes`);
   lines.push("");
@@ -25759,7 +25759,7 @@ async function hydrateTasksFromDailyNote(plugin) {
     );
     await plugin.savePluginData();
   } catch (error) {
-    console.error("Failed to hydrate Tomato Clock tasks from Daily Note", error);
+    console.error("Failed to hydrate Pomodoro Timer tasks from Daily Note", error);
   }
 }
 async function syncFocusTasksToDailyNote(plugin) {
@@ -25781,7 +25781,7 @@ async function syncFocusTasksToDailyNote(plugin) {
       focusTasksToSyncedTasks(prepared.managedTasks, plugin.settings.taskSyncTag)
     );
   } catch (error) {
-    console.error("Failed to sync Tomato Clock tasks to Daily Note", error);
+    console.error("Failed to sync Pomodoro Timer tasks to Daily Note", error);
   }
 }
 async function prepareTasksForDailyNote(plugin, file, content, tasks = normalizeFocusTasks(readStoredFocusTasks(plugin))) {
@@ -26034,7 +26034,7 @@ async function recordTimerCompletionToDailyNote(plugin, event) {
       focusTasksToSyncedTasks(prepared.managedTasks, plugin.settings.taskSyncTag)
     );
   } catch (error) {
-    console.error("Failed to write Tomato Clock session to Daily Note", error);
+    console.error("Failed to write Pomodoro Timer session to Daily Note", error);
   }
 }
 function createEmptyStats2(date) {
@@ -26104,7 +26104,7 @@ function createObsidianStorageAdapter(plugin) {
       var _a;
       plugin.data.appState[key] = value;
       void plugin.savePluginData().catch((error) => {
-        console.error("Failed to save Tomato Clock plugin data", error);
+        console.error("Failed to save Pomodoro Timer plugin data", error);
       });
       (_a = plugin.onAppStateSaved) == null ? void 0 : _a.call(plugin, key);
     }
@@ -26126,7 +26126,7 @@ var TomatoClockView = class extends import_obsidian.ItemView {
     return VIEW_TYPE_TOMATO_CLOCK;
   }
   getDisplayText() {
-    return "Tomato Clock";
+    return "Pomodoro Timer";
   }
   getIcon() {
     return "clock";
@@ -26157,7 +26157,7 @@ var import_obsidian2 = require("obsidian");
 var DEFAULT_SETTINGS = {
   dailyNoteFolder: "",
   dateFormat: "YYYY-MM-DD",
-  managedSectionHeading: "Tomato Clock",
+  managedSectionHeading: "Pomodoro Timer",
   taskSyncTag: "#pomodoro"
 };
 var TomatoClockSettingsTab = class extends import_obsidian2.PluginSettingTab {
@@ -26207,12 +26207,12 @@ var TomatoClockPlugin = class extends import_obsidian3.Plugin {
   async onload() {
     await this.loadPluginData();
     this.registerView(VIEW_TYPE_TOMATO_CLOCK, (leaf) => new TomatoClockView(leaf, this));
-    this.addRibbonIcon("clock", "Tomato Clock", () => {
+    this.addRibbonIcon("clock", "Pomodoro Timer", () => {
       this.activateView();
     });
     this.addCommand({
       id: "open-tomato-clock",
-      name: "Open Tomato Clock",
+      name: "Open Pomodoro Timer",
       callback: () => {
         this.activateView();
       }

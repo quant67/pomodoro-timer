@@ -59,7 +59,7 @@ export async function recordTimerCompletionToDailyNote(
 			focusTasksToSyncedTasks(prepared.managedTasks, plugin.settings.taskSyncTag),
 		);
 	} catch (error) {
-		console.error('Failed to write Tomato Clock session to Daily Note', error);
+		console.error('Failed to write Pomodoro Timer session to Daily Note', error);
 	}
 }
 

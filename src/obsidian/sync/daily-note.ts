@@ -51,7 +51,7 @@ export function renderManagedSection(
   // Summary header
   const totalSessions = stats.totalFocusSessions;
   const totalMin = stats.totalFocusMinutes;
-  lines.push(`## 🍅 Tomato Clock`);
+  lines.push(`## 🍅 Pomodoro Timer`);
   lines.push('');
   lines.push(`**${totalSessions}** focus sessions · **${totalMin}** minutes`);
   lines.push('');

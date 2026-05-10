@@ -1,4 +1,4 @@
-# Tomato Clock
+# Pomodoro Timer
 
 一个本地 Web 版番茄时钟，用于专注计时、任务管理和当日专注统计。应用运行在浏览器里，任务、统计和声音开关会保存到本地 `localStorage`。
 
@@ -81,7 +81,7 @@ src/
   Sidebar.tsx        左侧导航和声音控制
   obsidian/
     main.ts          Obsidian 插件入口
-    view.ts          Tomato Clock 工作区视图
+    view.ts          Pomodoro Timer 工作区视图
     settings.ts      插件设置页
     sync/            Daily Note 和 Markdown task 同步模块
 ```
@@ -106,10 +106,10 @@ src/
 - 插件注册 Ribbon 图标、命令、工作区视图和设置页
 - Obsidian 工作区视图已挂载 React Timer UI（`<App />`）
 - UI hooks 在插件内使用 Obsidian plugin data 保存任务、统计和声音开关
-- 完成 focus Pomodoro 后会把当日累计 session 写入 Daily Note 的 Tomato Clock 管理区块
+- 完成 focus Pomodoro 后会把当日累计 session 写入 Daily Note 的 Pomodoro Timer 管理区块
 - 任务同步使用 `#pomodoro` 标签，读取 vault 中的 Markdown checkbox task
 - 插件会给匹配任务补充 `^tc-task-*` block id，用于 UI 和 Markdown 行同步
-- UI 新建的任务写入 Tomato Clock 管理区块
+- UI 新建的任务写入 Pomodoro Timer 管理区块
 - UI 勾选、编辑来自笔记正文的任务时，会更新原始 Markdown checkbox 行
 - UI 移除来自笔记正文的任务时，会移除同步标签和 block id，保留原始 checkbox 任务
 - `src/obsidian/sync` 提供 Daily Note 区块更新、session 渲染、Markdown task 解析和 block id 更新
@@ -122,13 +122,13 @@ src/
 - [ ] 写一个番茄测试任务 #pomodoro
 ```
 
-执行命令面板里的 `Reload app without saving`，打开 `Tomato Clock`。任务会出现在 Focus Tasks 面板中，原始 Daily Note 行会自动补上 block id：
+执行命令面板里的 `Reload app without saving`，打开 `Pomodoro Timer`。任务会出现在 Focus Tasks 面板中，原始 Daily Note 行会自动补上 block id：
 
 ```md
 - [ ] 写一个番茄测试任务 #pomodoro ^tc-task-xxxxxx
 ```
 
-在 Tomato Clock 里勾选该任务后，Daily Note 原始行会更新为：
+在 Pomodoro Timer 里勾选该任务后，Daily Note 原始行会更新为：
 
 ```md
 - [x] 写一个番茄测试任务 #pomodoro ^tc-task-xxxxxx

@@ -11,7 +11,7 @@ export interface TomatoClockSettings {
 export const DEFAULT_SETTINGS: TomatoClockSettings = {
 	dailyNoteFolder: "",
 	dateFormat: "YYYY-MM-DD",
-	managedSectionHeading: "Tomato Clock",
+	managedSectionHeading: "Pomodoro Timer",
 	taskSyncTag: "#pomodoro",
 };
 

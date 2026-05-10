@@ -1,9 +1,9 @@
 {
   "id": "tomato-clock",
-  "name": "Tomato Clock",
+  "name": "Pomodoro Timer",
   "version": "0.1.0",
   "minAppVersion": "1.5.0",
   "description": "A Pomodoro timer for Obsidian",
-  "author": "Tomato Clock",
+  "author": "Pomodoro Timer",
   "isDesktopOnly": false
 }

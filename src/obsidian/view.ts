@@ -24,7 +24,7 @@ export class TomatoClockView extends ItemView {
 	}
 
 	getDisplayText(): string {
-		return "Tomato Clock";
+		return "Pomodoro Timer";
 	}
 
 	getIcon(): string {
