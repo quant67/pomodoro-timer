@@ -27,8 +27,8 @@ export function generateBlockIdSuffix(): string {
  */
 const TASK_LINE_RE = /^(\s*)([-*])\s+(\[[ xX]\])\s+(.+)/;
 
-/** Match a block id like `^tc-task-abc123` */
-const BLOCK_ID_RE = /\^tc-task-[a-f0-9]+\b/;
+/** Match a block id like `^pt-task-abc123`; legacy `^tc-task-*` ids are supported. */
+const BLOCK_ID_RE = /\^(?:pt|tc)-task-[a-f0-9]+\b/;
 
 /** Match inline tags like `#focus` */
 const TAG_RE = /#[\w/-]+/g;
@@ -46,7 +46,7 @@ export function parseTaskLine(line: string, lineIndex: number): SyncedTask | nul
 
   // Extract block id
   const blockIdMatch = rest.match(BLOCK_ID_RE);
-  const blockId = blockIdMatch ? blockIdMatch[0] : `^tc-task-${generateBlockIdSuffix()}`;
+  const blockId = blockIdMatch ? blockIdMatch[0] : `^pt-task-${generateBlockIdSuffix()}`;
 
   // Extract tags (from the part before any block id)
   const textPart = blockIdMatch ? rest.slice(0, rest.indexOf(blockIdMatch[0])).trim() : rest;
@@ -193,7 +193,7 @@ export function ensureBlockIds(content: string): string {
     if (BLOCK_ID_RE.test(line)) return line;
 
     // Generate a new block id and append it
-    const blockId = `^tc-task-${generateBlockIdSuffix()}`;
+    const blockId = `^pt-task-${generateBlockIdSuffix()}`;
     return `${line.trimEnd()} ${blockId}`;
   });
 
@@ -210,7 +210,7 @@ export function ensureFilteredTaskBlockIds(content: string, tagFilter: string): 
     if (normalizedTag && !parsed.tags.includes(normalizedTag)) return line;
     if (BLOCK_ID_RE.test(line)) return line;
 
-    return `${line.trimEnd()} ^tc-task-${generateBlockIdSuffix()}`;
+    return `${line.trimEnd()} ^pt-task-${generateBlockIdSuffix()}`;
   });
 
   return updatedLines.join('\n');

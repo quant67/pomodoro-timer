@@ -1,5 +1,5 @@
 import type { FocusTask } from '../types';
-import type { TomatoClockSettings } from './settings';
+import type { PomodoroTimerSettings } from './settings';
 import {
 	ensureFilteredTaskBlockIds,
 	filterTasksByTag,
@@ -14,18 +14,21 @@ import {
 	type ObsidianVault,
 } from './sync';
 import { readConfiguredDailyNote } from './daily-note-config';
-import type { TomatoClockPluginData } from './storage';
+import type { PomodoroTimerPluginData } from './storage';
 
-export const TASKS_KEY = 'tomato-tasks';
-const MANAGED_START = '<!-- tomato-clock:start -->';
-const MANAGED_END = '<!-- tomato-clock:end -->';
+export const TASKS_KEY = 'pomodoro-timer-tasks';
+const LEGACY_TASKS_KEY = 'tomato-tasks';
+const MANAGED_START = '<!-- pomodoro-timer:start -->';
+const MANAGED_END = '<!-- pomodoro-timer:end -->';
+const LEGACY_MANAGED_START = '<!-- tomato-clock:start -->';
+const LEGACY_MANAGED_END = '<!-- tomato-clock:end -->';
 
 interface TaskSyncPlugin {
 	app: {
 		vault: ObsidianVault;
 	};
-	settings: TomatoClockSettings;
-	data: TomatoClockPluginData;
+	settings: PomodoroTimerSettings;
+	data: PomodoroTimerPluginData;
 	savePluginData(): Promise<void>;
 }
 
@@ -89,7 +92,7 @@ export async function prepareTasksForDailyNote(
 }
 
 export function readStoredFocusTasks(plugin: TaskSyncPlugin): FocusTask[] {
-	const value = plugin.data.appState[TASKS_KEY];
+	const value = plugin.data.appState[TASKS_KEY] ?? plugin.data.appState[LEGACY_TASKS_KEY];
 	return Array.isArray(value) ? (value as FocusTask[]) : [];
 }
 
@@ -316,8 +319,13 @@ function isSourceTask(task: FocusTask): boolean {
 
 function getManagedLineRange(content: string): { start: number; end: number } | null {
 	const lines = content.split('\n');
-	const start = lines.findIndex((line) => line.trim() === MANAGED_START);
-	const end = lines.findIndex((line) => line.trim() === MANAGED_END);
+	let start = lines.findIndex((line) => line.trim() === MANAGED_START);
+	let end = lines.findIndex((line) => line.trim() === MANAGED_END);
+
+	if (start === -1 || end === -1 || end <= start) {
+		start = lines.findIndex((line) => line.trim() === LEGACY_MANAGED_START);
+		end = lines.findIndex((line) => line.trim() === LEGACY_MANAGED_END);
+	}
 
 	if (start === -1 || end === -1 || end <= start) {
 		return null;
@@ -341,7 +349,7 @@ function renderTaskLine(task: FocusTask, blockId: string, tag: string): string {
 
 function blockIdFromTaskId(id: string): string {
 	const suffix = id.toLowerCase().replace(/[^a-f0-9]/g, '').slice(0, 12);
-	return `^tc-task-${suffix || Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, '0')}`;
+	return `^pt-task-${suffix || Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, '0')}`;
 }
 
 function createEmptyStats(date: string): SyncDailyStats {

@@ -1,27 +1,27 @@
 # Pomodoro Timer
 
-一个本地 Web 版番茄时钟，用于专注计时、任务管理和当日专注统计。应用运行在浏览器里，任务、统计和声音开关会保存到本地 `localStorage`。
+Pomodoro Timer 是一个 Obsidian 原生番茄钟插件，用于专注计时、任务管理和 Daily Note 记录。
 
 ## 功能
 
 - Pomodoro、Short Break、Long Break 三种模式
 - 默认时长：25 分钟、5 分钟、15 分钟
-- Focus、Short Break、Long Break 时长可在界面里调整并保存
-- 圆环倒计时进度、开始、暂停、继续、重置
-- 番茄完成后自动进入休息阶段，每 4 个番茄进入长休息
-- 专注任务添加、编辑、完成、移除、active 选择和过滤
-- 今日番茄数、专注分钟、专注率、连续状态展示
+- 圆环倒计时、开始、暂停、继续、重置
+- 每 4 个番茄进入长休息
+- 今日番茄数和专注分钟统计
+- Focus Tasks 添加、编辑、完成、移除、active 选择和过滤
 - 声音提醒开关
-- 桌面三栏布局和移动端堆叠布局
+- Obsidian 原生工作区视图
+- Daily Note 自动创建、session 写入、`#pomodoro` Markdown task 同步
 
 ## 技术栈
 
-- React 18
 - TypeScript
-- Vite
-- CSS
+- esbuild
+- Obsidian Plugin API
+- Obsidian Vault API
 
-## 本地运行
+## 开发
 
 安装依赖：
 
@@ -29,125 +29,134 @@
 npm install
 ```
 
-启动开发服务：
+开发监听构建：
 
 ```bash
 npm run dev
 ```
 
-默认访问地址：
-
-```text
-http://127.0.0.1:5173/
-```
-
-构建生产版本：
+生产构建：
 
 ```bash
 npm run build
 ```
 
-只构建 Web 版本：
-
-```bash
-npm run build:web
-```
-
-只构建 Obsidian 插件入口：
-
-```bash
-npm run build:plugin
-```
-
-预览生产构建：
-
-```bash
-npm run preview
-```
-
-## 项目结构
+构建产物：
 
 ```text
-src/
-  App.tsx            应用主布局
-  useTimer.ts        计时器状态和模式切换逻辑
-  useTasks.ts        任务状态和本地保存
-  useStats.ts        当日统计
-  useSound.ts        声音开关
-  TimerDisplay.tsx   倒计时展示
-  ProgressRing.tsx   圆环进度
-  TaskPanel.tsx      任务面板
-  StatsPanel.tsx     统计面板
-  Sidebar.tsx        左侧导航和声音控制
-  obsidian/
-    main.ts          Obsidian 插件入口
-    view.ts          Pomodoro Timer 工作区视图
-    settings.ts      插件设置页
-    sync/            Daily Note 和 Markdown task 同步模块
+main.js
+styles.css
+manifest.json
 ```
 
-## 数据保存
+## 安装到 Obsidian
 
-应用使用以下 `localStorage` key：
+将插件安装到任意 Obsidian vault 的插件目录：
 
-- `tomato-tasks`
-- `tomato-active-task`
-- `tomato-timer-config`
-- `tomato-stats`
-- `tomato-sound`
+```text
+<your-vault>/.obsidian/plugins/pomodoro-timer
+```
 
-## Obsidian 集成计划
+使用软链接安装本仓库产物：
 
-当前代码已经加入插件版基础设施：
+```bash
+PLUGIN_DIR="<your-vault>/.obsidian/plugins/pomodoro-timer"
+REPO_DIR="<path-to-this-repo>"
 
-- `manifest.json` 描述 Obsidian 插件元数据
-- `main.js` 由 `npm run build:plugin` 生成
-- `styles.css` 由 `src/index.css` + `src/App.css` + `src/obsidian/plugin.css` 拼接生成
-- 插件注册 Ribbon 图标、命令、工作区视图和设置页
-- Obsidian 工作区视图已挂载 React Timer UI（`<App />`）
-- UI hooks 在插件内使用 Obsidian plugin data 保存任务、统计和声音开关
-- 完成 focus Pomodoro 后会把当日累计 session 写入 Daily Note 的 Pomodoro Timer 管理区块
-- 任务同步使用 `#pomodoro` 标签，读取 vault 中的 Markdown checkbox task
-- 插件会给匹配任务补充 `^tc-task-*` block id，用于 UI 和 Markdown 行同步
-- UI 新建的任务写入 Pomodoro Timer 管理区块
-- UI 勾选、编辑来自笔记正文的任务时，会更新原始 Markdown checkbox 行
-- UI 移除来自笔记正文的任务时，会移除同步标签和 block id，保留原始 checkbox 任务
-- `src/obsidian/sync` 提供 Daily Note 区块更新、session 渲染、Markdown task 解析和 block id 更新
+mkdir -p "$PLUGIN_DIR"
+ln -sf "$REPO_DIR/manifest.json" "$PLUGIN_DIR/manifest.json"
+ln -sf "$REPO_DIR/main.js" "$PLUGIN_DIR/main.js"
+ln -sf "$REPO_DIR/styles.css" "$PLUGIN_DIR/styles.css"
+```
 
-## Obsidian task 同步验证
+Obsidian 中启用：
 
-在当天 Daily Note 中添加：
+1. 打开目标 vault
+2. Settings → Community plugins
+3. Reload plugins
+4. 启用 `Pomodoro Timer`
+5. 点击左侧 clock 图标，或命令面板运行 `Open Pomodoro Timer`
+
+## Daily Note 同步
+
+插件读取 Obsidian Daily Notes 核心插件配置：
+
+- Daily Note folder
+- Date format
+- Template
+
+插件设置页提供备用配置：
+
+- Daily note folder
+- Date format
+- Managed section heading
+- Task sync tag，默认 `#pomodoro`
+
+番茄完成后，当天 Daily Note 会写入受控区块：
+
+```md
+<!-- pomodoro-timer:start -->
+
+## 🍅 Pomodoro Timer
+
+**1** focus sessions · **25** minutes
+
+### Sessions
+- 🍅 **focus** 25m
+
+<!-- pomodoro-timer:end -->
+```
+
+## Markdown Task 同步
+
+在当天 Daily Note 或 vault 任意 Markdown 文件中添加：
 
 ```md
 - [ ] 写一个番茄测试任务 #pomodoro
 ```
 
-执行命令面板里的 `Reload app without saving`，打开 `Pomodoro Timer`。任务会出现在 Focus Tasks 面板中，原始 Daily Note 行会自动补上 block id：
+打开 `Pomodoro Timer` 后，任务会出现在 Focus Tasks 面板中。插件会给同步任务补充 block id：
 
 ```md
-- [ ] 写一个番茄测试任务 #pomodoro ^tc-task-xxxxxx
+- [ ] 写一个番茄测试任务 #pomodoro ^pt-task-xxxxxx
 ```
 
-在 Pomodoro Timer 里勾选该任务后，Daily Note 原始行会更新为：
+在插件里勾选任务后，原始 Markdown 行会更新为：
 
 ```md
-- [x] 写一个番茄测试任务 #pomodoro ^tc-task-xxxxxx
+- [x] 写一个番茄测试任务 #pomodoro ^pt-task-xxxxxx
 ```
 
-## MVP 版本
+在插件里编辑任务文本，会更新原始 Markdown checkbox 行。移除来自笔记正文的任务时，插件会移除同步标签和 block id，并保留原始 checkbox 任务。
 
-`0.1.0` 是第一个 MVP 版本，范围包括：
+## 项目结构
 
-- 本地 Web 番茄钟
-- Obsidian 插件视图
-- Daily Notes 配置读取和当天日记自动创建
-- 番茄完成记录写入 Daily Note
-- vault 内 `#pomodoro` Markdown task 同步
-- 可配置番茄钟时长
+```text
+src/
+  types.ts           插件共享类型
+  utils.ts           时间格式、ID、声音提醒等工具
+  obsidian/
+    main.ts          插件入口
+    view.ts          原生 Pomodoro Timer 工作区视图
+    settings.ts      插件设置页
+    storage.ts       plugin data 结构和迁移
+    task-sync.ts     UI 任务和 Markdown task 同步
+    daily-note-config.ts
+                     Daily Notes 配置读取
+    daily-note-writer.ts
+                     番茄完成后写入 Daily Note
+    sync/            Daily Note 区块、session 渲染、Markdown task 解析
+```
+
+## 数据保存
+
+Obsidian plugin data：
+
+- `settings`
+- `appState`
+- `syncDailyStats`
 
 ## 验证
-
-当前已通过：
 
 ```bash
 npm run build

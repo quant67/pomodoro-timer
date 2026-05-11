@@ -4,7 +4,7 @@ import process from "process";
 import builtins from "builtin-modules";
 
 const prod = process.argv[2] === "production";
-const cssSources = ["src/index.css", "src/App.css", "src/obsidian/plugin.css"];
+const cssSources = ["src/obsidian/plugin.css"];
 
 async function writePluginStyles() {
 	const styles = await Promise.all(cssSources.map((file) => readFile(file, "utf8")));

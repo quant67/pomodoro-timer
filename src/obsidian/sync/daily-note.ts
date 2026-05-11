@@ -21,8 +21,10 @@ export interface ObsidianFile {
 // Pure rendering functions (testable without an Obsidian app)
 // ---------------------------------------------------------------------------
 
-const MANAGED_START = '<!-- tomato-clock:start -->';
-const MANAGED_END = '<!-- tomato-clock:end -->';
+const MANAGED_START = '<!-- pomodoro-timer:start -->';
+const MANAGED_END = '<!-- pomodoro-timer:end -->';
+const LEGACY_MANAGED_START = '<!-- tomato-clock:start -->';
+const LEGACY_MANAGED_END = '<!-- tomato-clock:end -->';
 
 /** Render a single session as a markdown list item */
 export function renderSession(session: PomodoroSession): string {
@@ -97,16 +99,16 @@ export function renderManagedSection(
 export function splitAtManagedSection(
   content: string,
 ): [before: string | null, between: string | null, after: string | null] {
-  const startIdx = content.indexOf(MANAGED_START);
-  const endIdx = content.indexOf(MANAGED_END);
+  const marker = findManagedMarkers(content);
 
-  if (startIdx === -1 || endIdx === -1 || endIdx <= startIdx) {
+  if (marker === null) {
     return [content, null, null];
   }
 
-  const before = content.slice(0, startIdx).replace(/\n*$/, '');
-  const between = content.slice(startIdx + MANAGED_START.length, endIdx).trim();
-  const after = content.slice(endIdx + MANAGED_END.length).replace(/^\n*/, '');
+  const { start, end, startToken, endToken } = marker;
+  const before = content.slice(0, start).replace(/\n*$/, '');
+  const between = content.slice(start + startToken.length, end).trim();
+  const after = content.slice(end + endToken.length).replace(/^\n*/, '');
 
   return [
     before || null,
@@ -117,7 +119,7 @@ export function splitAtManagedSection(
 
 /**
  * Given file content, replace (or append) the managed section.
- * Preserves everything outside `<!-- tomato-clock:start -->...<!-- tomato-clock:end -->`.
+ * Preserves everything outside the managed Pomodoro Timer marker block.
  */
 export function upsertManagedSection(
   currentContent: string,
@@ -137,6 +139,23 @@ export function upsertManagedSection(
   if (after) parts.push(after);
 
   return parts.join('\n\n') + '\n';
+}
+
+function findManagedMarkers(
+  content: string,
+): { start: number; end: number; startToken: string; endToken: string } | null {
+  for (const [startToken, endToken] of [
+    [MANAGED_START, MANAGED_END],
+    [LEGACY_MANAGED_START, LEGACY_MANAGED_END],
+  ] as const) {
+    const start = content.indexOf(startToken);
+    const end = content.indexOf(endToken);
+    if (start !== -1 && end !== -1 && end > start) {
+      return { start, end, startToken, endToken };
+    }
+  }
+
+  return null;
 }
 
 // ---------------------------------------------------------------------------

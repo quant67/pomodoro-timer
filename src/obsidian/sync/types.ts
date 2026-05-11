@@ -40,7 +40,7 @@ export interface DailyStats {
  * for two-way sync with the Obsidian UI.
  */
 export interface SyncedTask {
-  /** Stable block id like `^tc-task-abc123` */
+  /** Stable block id like `^pt-task-abc123` */
   blockId: string;
   /** The task text (without checkbox markers or block id) */
   text: string;

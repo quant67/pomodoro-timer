@@ -26,15 +26,6 @@ export interface DailyStats {
   focusMinutes: number;
 }
 
-export interface SoundSettings {
-  enabled: boolean;
-}
-
-export interface JsonStorageAdapter {
-  load<T>(key: string, fallback: T): T;
-  save<T>(key: string, value: T): void;
-}
-
 export interface TimerCompletionEvent {
   mode: TimerMode;
   focusMinutes: number;

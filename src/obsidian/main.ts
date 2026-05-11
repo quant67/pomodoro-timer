@@ -1,41 +1,41 @@
 import { Plugin, type WorkspaceLeaf } from "obsidian";
-import { TomatoClockView, VIEW_TYPE_TOMATO_CLOCK } from "./view";
-import { TomatoClockSettingsTab } from "./settings";
-import type { TomatoClockSettings } from "./settings";
+import { PomodoroTimerView, VIEW_TYPE_POMODORO_TIMER } from "./view";
+import { PomodoroTimerSettingsTab } from "./settings";
+import type { PomodoroTimerSettings } from "./settings";
 import { DEFAULT_SETTINGS } from "./settings";
 import {
 	createDefaultPluginData,
 	mergePluginData,
-	type TomatoClockPluginData,
+	type PomodoroTimerPluginData,
 } from "./storage";
 import { syncFocusTasksToDailyNote, TASKS_KEY } from "./task-sync";
 
-export default class TomatoClockPlugin extends Plugin {
-	settings: TomatoClockSettings = DEFAULT_SETTINGS;
-	data: TomatoClockPluginData = createDefaultPluginData(DEFAULT_SETTINGS);
+export default class PomodoroTimerPlugin extends Plugin {
+	settings: PomodoroTimerSettings = DEFAULT_SETTINGS;
+	data: PomodoroTimerPluginData = createDefaultPluginData(DEFAULT_SETTINGS);
 
 	async onload() {
 		await this.loadPluginData();
 
-		this.registerView(VIEW_TYPE_TOMATO_CLOCK, (leaf) => new TomatoClockView(leaf, this));
+		this.registerView(VIEW_TYPE_POMODORO_TIMER, (leaf) => new PomodoroTimerView(leaf, this));
 
 		this.addRibbonIcon("clock", "Pomodoro Timer", () => {
 			this.activateView();
 		});
 
 		this.addCommand({
-			id: "open-tomato-clock",
+			id: "open-pomodoro-timer",
 			name: "Open Pomodoro Timer",
 			callback: () => {
 				this.activateView();
 			},
 		});
 
-		this.addSettingTab(new TomatoClockSettingsTab(this.app, this));
+		this.addSettingTab(new PomodoroTimerSettingsTab(this.app, this));
 	}
 
 	onunload() {
-		this.app.workspace.detachLeavesOfType(VIEW_TYPE_TOMATO_CLOCK);
+		this.app.workspace.detachLeavesOfType(VIEW_TYPE_POMODORO_TIMER);
 	}
 
 	async loadPluginData() {
@@ -61,12 +61,12 @@ export default class TomatoClockPlugin extends Plugin {
 	async activateView() {
 		const { workspace } = this.app;
 
-		let leaf: WorkspaceLeaf | null = workspace.getLeavesOfType(VIEW_TYPE_TOMATO_CLOCK)[0] ?? null;
+		let leaf: WorkspaceLeaf | null = workspace.getLeavesOfType(VIEW_TYPE_POMODORO_TIMER)[0] ?? null;
 
 		if (!leaf) {
 			leaf = workspace.getRightLeaf(false);
 			if (!leaf) return;
-			await leaf.setViewState({ type: VIEW_TYPE_TOMATO_CLOCK, active: true });
+			await leaf.setViewState({ type: VIEW_TYPE_POMODORO_TIMER, active: true });
 		}
 
 		workspace.revealLeaf(leaf);

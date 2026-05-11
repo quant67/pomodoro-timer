@@ -1,25 +1,26 @@
 import type { TimerCompletionEvent } from '../types';
-import type { TomatoClockSettings } from './settings';
+import type { PomodoroTimerSettings } from './settings';
 import {
 	writeManagedSection,
 	type ObsidianVault,
 } from './sync';
 import type { DailyStats as SyncDailyStats, PomodoroSession } from './sync';
-import type { TomatoClockPluginData } from './storage';
+import type { PomodoroTimerPluginData } from './storage';
 import { readConfiguredDailyNote } from './daily-note-config';
 import {
 	focusTasksToSyncedTasks,
 	normalizeFocusTasks,
 	prepareTasksForDailyNote,
 	readStoredFocusTasks,
+	TASKS_KEY,
 } from './task-sync';
 
 interface DailyNoteWriterPlugin {
 	app: {
 		vault: ObsidianVault;
 	};
-	settings: TomatoClockSettings;
-	data: TomatoClockPluginData;
+	settings: PomodoroTimerSettings;
+	data: PomodoroTimerPluginData;
 	savePluginData(): Promise<void>;
 }
 
@@ -46,7 +47,7 @@ export async function recordTimerCompletionToDailyNote(
 		};
 
 		plugin.data.syncDailyStats[date] = nextStats;
-		plugin.data.appState['tomato-tasks'] = tasks;
+		plugin.data.appState[TASKS_KEY] = tasks;
 		await plugin.savePluginData();
 
 		const { file, content } = await readConfiguredDailyNote(plugin, completedAt);
@@ -91,7 +92,7 @@ function createSession(
 }
 
 function createSessionId(): string {
-	return globalThis.crypto?.randomUUID?.() ?? `tc-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+	return globalThis.crypto?.randomUUID?.() ?? `pt-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
 function parseEventDate(value: string): Date {

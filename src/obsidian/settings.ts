@@ -1,24 +1,24 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
-import type TomatoClockPlugin from "./main";
+import type PomodoroTimerPlugin from "./main";
 
-export interface TomatoClockSettings {
+export interface PomodoroTimerSettings {
 	dailyNoteFolder: string;
 	dateFormat: string;
 	managedSectionHeading: string;
 	taskSyncTag: string;
 }
 
-export const DEFAULT_SETTINGS: TomatoClockSettings = {
+export const DEFAULT_SETTINGS: PomodoroTimerSettings = {
 	dailyNoteFolder: "",
 	dateFormat: "YYYY-MM-DD",
 	managedSectionHeading: "Pomodoro Timer",
 	taskSyncTag: "#pomodoro",
 };
 
-export class TomatoClockSettingsTab extends PluginSettingTab {
-	plugin: TomatoClockPlugin;
+export class PomodoroTimerSettingsTab extends PluginSettingTab {
+	plugin: PomodoroTimerPlugin;
 
-	constructor(app: App, plugin: TomatoClockPlugin) {
+	constructor(app: App, plugin: PomodoroTimerPlugin) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}

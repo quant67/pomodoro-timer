@@ -1,28 +1,3 @@
-import type { JsonStorageAdapter } from './types';
-
-export function loadJSON<T>(key: string, fallback: T): T {
-  try {
-    const raw = localStorage.getItem(key);
-    if (raw === null) return fallback;
-    return JSON.parse(raw) as T;
-  } catch {
-    return fallback;
-  }
-}
-
-export const browserStorage: JsonStorageAdapter = {
-  load: loadJSON,
-  save: saveJSON,
-};
-
-export function saveJSON<T>(key: string, value: T): void {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-  } catch {
-    // storage full or unavailable — silently ignore
-  }
-}
-
 export function todayDate(): string {
   const d = new Date();
   const yyyy = d.getFullYear();

@@ -1,4 +1,4 @@
-import type { TomatoClockSettings } from './settings';
+import type { PomodoroTimerSettings } from './settings';
 import {
 	dailyNotePath,
 	readDailyNote,
@@ -23,7 +23,7 @@ export interface DailyNoteHost {
 	app: {
 		vault: ObsidianVault;
 	};
-	settings: TomatoClockSettings;
+	settings: PomodoroTimerSettings;
 }
 
 export async function readConfiguredDailyNote(
